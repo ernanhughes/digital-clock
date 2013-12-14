@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <array name="time_option_arr">
+        <item>AM</item>
+        <item>PM</item>
+    </array>
+    <array name="val_arr">
+        <item>AM</item>
+        <item>PM</item>
+    </array>
+    <array name="date_format_arr">
+        <item>yyyyMMdd</item>
+        <item>PM</item>
+    </array>
+    <array name="date_range_arr">
+        <item>Daily</item>
+        <item>Weekly</item>
+    </array>
+
+
+</resources>

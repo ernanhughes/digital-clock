@@ -3,45 +3,149 @@ package com.banba.digitalclock;
 import java.util.Random;
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
+import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Typeface;
+import android.os.Handler;
+import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.service.dreams.DreamService;
+import android.text.format.Time;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.service.dreams.DreamService;
+import android.widget.ScrollView;
+import android.widget.Toast;
+
+import com.banba.digitalclock.ui.ClockHelper;
+import com.banba.digitalclock.ui.DigitalFlipClock;
+import com.banba.digitalclock.ui.EdgeEffectUtil;
+import com.banba.digitalclock.ui.FlipClock;
+import com.banba.digitalclock.ui.RootLayout;
 
 /**
  * Created by Ernan on 13/12/13.
  * Copyrite Banba Inc. 2013.
  */
-public class DigitalClockService extends DreamService implements OnClickListener {
+public class DigitalClockService extends DreamService implements OnClickListener, ClockHelper.OnTimeChangeListener {
 
-    private Button dismissBtn;
-    private ImageView[] robotImgs;
-    private AnimatorSet[] robotSets;
-    private final int ROWS_COLS=5;
-    private final int NUM_ROBOTS=ROWS_COLS*ROWS_COLS;
-    private int randPosn;
+    public static final String PREF_DAYDREAM_COLOR = "pref_daydream_color";
+    public static final String PREF_DAYDREAM_NIGHT_MODE = "pref_daydream_night_mode";
+    public static final String PREF_DAYDREAM_ANIMATION = "pref_daydream_animation";
+
+
+    private static final int ANIMATION_HAS_ROTATE = 0x1;
+    private static final int ANIMATION_HAS_SLIDE = 0x2;
+    private static final int ANIMATION_HAS_FADE = 0x4;
+
+    private static final int ANIMATION_NONE = 0;
+    private static final int ANIMATION_FADE = ANIMATION_HAS_FADE;
+    private static final int ANIMATION_SLIDE = ANIMATION_FADE | ANIMATION_HAS_SLIDE;
+    private static final int ANIMATION_PENDULUM = ANIMATION_SLIDE | ANIMATION_HAS_ROTATE;
+
+    private static final int SECONDS_MILLIS = 1000;
+    private static final int CYCLE_INTERVAL_MILLIS = 20 * SECONDS_MILLIS;
+    private static final int FADE_MILLIS = 5 * SECONDS_MILLIS;
+    private static final int TRAVEL_ROTATE_DEGREES = 3;
+    private static final float SCALE_WHEN_MOVING = 0.85f;
+
+
+
+    private Handler mHandler = new Handler();
+    private int mTravelDistance;
+    private int mForegroundColor;
+    private int mAnimation;
+
+    private ViewGroup mDaydreamContainer;
+    private ViewGroup mExtensionsContainer;
+    private AnimatorSet mSingleCycleAnimator;
+
+    private boolean mAttached;
+    private boolean mNeedsRelayout;
+    private boolean mMovingLeft;
+    private boolean mManuallyAwoken;
+
+    final ClockHelper helper;
+
+    DigitalFlipClock flipClock = null;
+
+    public DigitalClockService(){
+        helper = new ClockHelper(new ClockHelper.OnTimeChangeListener() {
+            @Override
+            public void handleTimeChange(Time now) {
+                System.out.print(now);
+//                if(null != flipClock)
+//                    flipClock.onTimeChanged();
+            }
+        });
+        matcher = new IntentFilter();
+        matcher.addAction(CREATE);
+        matcher.addAction(CANCEL);
+    }
+
+    public static final String CREATE = "CREATE";
+    public static final String CANCEL = "CANCEL";
+
+    private IntentFilter matcher;
+
+    protected void onHandleIntent(Intent intent) {
+        String action = intent.getAction();
+        String notificationId = intent.getStringExtra("notificationId");
+
+        if (matcher.matchAction(action)) {
+            execute(action, notificationId);
+        }
+    }
+
+    private void execute(String action, String notificationId) {
+        AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+//        Cursor c = RemindMe.db.query(Notification.TABLE_NAME, null, "_id = ?",
+//                new String[]{notificationId}, null, null, null);
+//
+//        if (c.moveToFirst()) {
+//            Intent i = new Intent(this, AlarmReceiver.class);
+//            i.putExtra("id", c.getLong(c.getColumnIndex(Notification.COL_ID)));
+//            i.putExtra("msg", c.getString(c.getColumnIndex(Notification.COL_MSG)));
+//
+//            PendingIntent pi = PendingIntent.getBroadcast(this, 0, i,
+//                    PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//            long time = c.getLong(c.getColumnIndex(Notification.COL_DATETIME));
+//            if (CREATE.equals(action)) {
+//                am.set(AlarmManager.RTC_WAKEUP, time, pi);
+//
+//            } else if (CANCEL.equals(action)) {
+//                am.cancel(pi);
+//            }
+//        }
+//        c.close();
+    }
 
     @Override
     public void onDreamingStarted() {
         super.onDreamingStarted();
-        for(int r=0; r<NUM_ROBOTS; r++){
-            if(r!=randPosn)
-                robotSets[r].start();
-        }
     }
 
     @Override
     public void onDreamingStopped(){
-        for(int r=0; r<NUM_ROBOTS; r++){
-            if(r!=randPosn)
-                robotSets[r].cancel();
-        }
+
         super.onDreamingStopped();
     }
 
@@ -49,65 +153,155 @@ public class DigitalClockService extends DreamService implements OnClickListener
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
 
+        mAttached = true;
+        setInteractive(true);
+        setFullscreen(true);
+
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        mForegroundColor = sp.getInt(PREF_DAYDREAM_COLOR,
+                Preferences.DEFAULT_WIDGET_FOREGROUND_COLOR);
+        String animation = sp.getString(PREF_DAYDREAM_ANIMATION, "");
+        if ("none".equals(animation)) {
+            mAnimation = ANIMATION_NONE;
+        } else if ("slide".equals(animation)) {
+            mAnimation = ANIMATION_SLIDE;
+        } else if ("fade".equals(animation)) {
+            mAnimation = ANIMATION_FADE;
+        } else {
+            mAnimation = ANIMATION_PENDULUM;
+        }
+        setScreenBright(!sp.getBoolean(PREF_DAYDREAM_NIGHT_MODE, true));
+        setContentView(R.layout.digitalclock);
+        helper.onAttachToWindow(getApplicationContext());
+        flipClock = (DigitalFlipClock)findViewById(R.id.cwClock);
+
+        Toast.makeText(this, "Lock Service Created", Toast.LENGTH_LONG).show();
         Typeface tf = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/digital-7.ttf");
 
-        Random rand = new Random();
-        randPosn = rand.nextInt(NUM_ROBOTS);
-        GridLayout ddLayout = new GridLayout(this);
-        ddLayout.setColumnCount(ROWS_COLS);
-        ddLayout.setRowCount(ROWS_COLS);
-        robotSets = new AnimatorSet[NUM_ROBOTS];
-        robotImgs = new ImageView[NUM_ROBOTS];
-        Point screenSize = new Point();
-        getWindowManager().getDefaultDisplay().getSize(screenSize);
-        int robotWidth = screenSize.x/ROWS_COLS;
-        int robotHeight = screenSize.y/ROWS_COLS;
 
-        for (int r=0; r<NUM_ROBOTS; r++){
-            GridLayout.LayoutParams ddP = new GridLayout.LayoutParams();
-            ddP.width=robotWidth;
-            ddP.height=robotHeight;
-            if (r==randPosn) {
-                dismissBtn = new Button(this);
-                dismissBtn.setText("stop");
-                dismissBtn.setTypeface(tf, Typeface.BOLD);
-                dismissBtn.setBackgroundColor(Color.WHITE);
-                dismissBtn.setTextColor(Color.RED);
-                dismissBtn.setOnClickListener(this);
-                dismissBtn.setLayoutParams(ddP);
-                ddLayout.addView(dismissBtn);
-            } else{
-                robotImgs[r] = new ImageView(this);
-                robotImgs[r].setImageResource(R.drawable.ic_launcher);
-                ddLayout.addView(robotImgs[r], ddP);
-                robotSets[r] = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.anim.spin);
-
-            }
-        }
-        setContentView(ddLayout);
     }
+
+    private Runnable mUpdateTimeTask = new Runnable() {
+        public void run() {
+             mHandler.postDelayed(mUpdateTimeTask, 1000);
+        }
+    };
 
     @Override
     public void onDetachedFromWindow() {
-        for(int r=0; r<NUM_ROBOTS; r++){
-            if(r!=randPosn)
-                robotImgs[r].setOnClickListener(null);
-        }
+        mHandler.removeCallbacksAndMessages(null);
+        mAttached = false;
         super.onDetachedFromWindow();
+        helper.onDetachedFromWindow(getApplicationContext());
     }
 
-    public void onClick(View v){
-        if(v instanceof Button && (Button)v==dismissBtn){
-            this.finish();
-        } else {
-            for(int r=0; r<NUM_ROBOTS; r++){
-                if((ImageView)v==robotImgs[r]){
-                    if(robotSets[r].isStarted()) robotSets[r].cancel();
-                    else robotSets[r].start();
-                    break;
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mHandler.removeCallbacks(mCycleRunnable);
+        layoutDream();
+    }
+
+    private void layoutDream() {
+        setContentView(R.layout.digitalclock);
+        mNeedsRelayout = true;
+        renderDaydream(true);
+
+        mHandler.removeCallbacks(mCycleRunnable);
+        mHandler.postDelayed(mCycleRunnable, CYCLE_INTERVAL_MILLIS - FADE_MILLIS);
+
+//        EdgeEffectUtil.tryChangeEdgeEffects(
+//                (ScrollView) findViewById(R.id.extensions_scroller),
+//                mForegroundColor);
+    }
+
+    private void renderDaydream(final boolean restartAnimation) {
+        if (!mAttached) {
+            return;
+        }
+
+        if (restartAnimation) {
+            // Only modify fullscreen state if this render will restart an animation (enter a new
+            // cycle)
+            setFullscreen(true);
+        }
+
+        final Resources res = getResources();
+
+        mDaydreamContainer = (ViewGroup) findViewById(R.id.daydream_container);
+        RootLayout rootContainer = (RootLayout)
+                findViewById(R.id.daydream_root);
+        if (mTravelDistance == 0) {
+            mTravelDistance = rootContainer.getWidth() / 4;
+        }
+        rootContainer.setRootLayoutListener(new RootLayout.RootLayoutListener() {
+            @Override
+            public void onAwake() {
+                mManuallyAwoken = true;
+                setFullscreen(false);
+                mHandler.removeCallbacks(mCycleRunnable);
+                mHandler.postDelayed(mCycleRunnable, CYCLE_INTERVAL_MILLIS);
+                mDaydreamContainer.animate()
+                        .alpha(1f)
+                        .rotation(0)
+                        .scaleX(1f)
+                        .scaleY(1f)
+                        .translationX(0f)
+                        .translationY(0f)
+                        .setDuration(res.getInteger(android.R.integer.config_shortAnimTime));
+                if (mSingleCycleAnimator != null) {
+                    mSingleCycleAnimator.cancel();
                 }
             }
-        }
+
+            @Override
+            public boolean isAwake() {
+                return mManuallyAwoken;
+            }
+
+            @Override
+            public void onSizeChanged(int width, int height) {
+                mTravelDistance = width / 4;
+            }
+        });
+
+        DisplayMetrics displayMetrics = res.getDisplayMetrics();
+
+        int screenWidthDp = (int) (displayMetrics.widthPixels * 1f / displayMetrics.density);
+        int screenHeightDp = (int) (displayMetrics.heightPixels * 1f / displayMetrics.density);
+
     }
 
+
+    public Runnable mCycleRunnable = new Runnable() {
+        @Override
+        public void run() {
+            mManuallyAwoken = false;
+            float outAlpha = 1f;
+            if ((mAnimation & ANIMATION_HAS_FADE) != 0) {
+                outAlpha = 0f;
+            }
+            mDaydreamContainer.animate().alpha(outAlpha).setDuration(FADE_MILLIS)
+                    .withEndAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            renderDaydream(true);
+                            mHandler.removeCallbacks(mCycleRunnable);
+                            mHandler.postDelayed(mCycleRunnable,
+                                    CYCLE_INTERVAL_MILLIS - FADE_MILLIS);
+                            mDaydreamContainer.animate().alpha(1f).setDuration(FADE_MILLIS);
+                        }
+                    });
+        }
+    };
+
+    @Override
+    public void onClick(View v) {
+
+    }
+
+    @Override
+    public void handleTimeChange(Time now) {
+
+    }
 }

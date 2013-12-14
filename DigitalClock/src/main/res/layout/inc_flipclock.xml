@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge 
+	xmlns:android="http://schemas.android.com/apk/res/android">
+	
+	<TextView
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content"
+        android:text="1"
+		android:id="@+id/dcHour0">
+	</TextView>
+	<TextView
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content"
+        android:text="1"
+		android:id="@+id/dcHour1"
+		android:paddingRight="5dp" android:background="#fff">
+	</TextView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1"
+        android:id="@+id/dcMinute0">
+    </TextView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1"
+        android:id="@+id/dcMinute1">
+    </TextView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1"
+        android:id="@+id/dcSecond0">
+    </TextView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1"
+        android:id="@+id/dcSecond1">
+    </TextView>
+
+</merge>

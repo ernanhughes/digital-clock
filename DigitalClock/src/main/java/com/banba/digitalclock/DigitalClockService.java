@@ -5,6 +5,7 @@ import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.service.dreams.DreamService;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -48,6 +49,8 @@ public class DigitalClockService extends DreamService implements OnClickListener
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
 
+        Typeface tf = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/digital-7.ttf");
+
         Random rand = new Random();
         randPosn = rand.nextInt(NUM_ROBOTS);
         GridLayout ddLayout = new GridLayout(this);
@@ -67,6 +70,7 @@ public class DigitalClockService extends DreamService implements OnClickListener
             if (r==randPosn) {
                 dismissBtn = new Button(this);
                 dismissBtn.setText("stop");
+                dismissBtn.setTypeface(tf, Typeface.BOLD);
                 dismissBtn.setBackgroundColor(Color.WHITE);
                 dismissBtn.setTextColor(Color.RED);
                 dismissBtn.setOnClickListener(this);

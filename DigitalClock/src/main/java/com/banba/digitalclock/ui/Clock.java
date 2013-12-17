@@ -1,19 +1,18 @@
 package com.banba.digitalclock.ui;
 
-import java.util.TimeZone;
-
 import android.text.format.Time;
+
+import java.util.TimeZone;
 
 /**
  * Represents a clock that has timezone support.
- * 
- * @author jonson
  *
+ * @author jonson
  */
 public interface Clock {
-	
-	public void setTimeZone(TimeZone timeZone);
-	
-	public void onTimeChanged(Time now);
-	
+
+    public void setTimeZone(TimeZone timeZone);
+
+    public void onTimeChanged(Time now);
+
 }

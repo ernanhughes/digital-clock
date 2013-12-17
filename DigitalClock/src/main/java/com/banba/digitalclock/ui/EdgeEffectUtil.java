@@ -25,7 +25,6 @@ import android.graphics.drawable.Drawable;
 import android.widget.EdgeEffect;
 import android.widget.ScrollView;
 
-
 import com.banba.digitalclock.R;
 
 import java.lang.reflect.Field;
@@ -39,7 +38,7 @@ public class EdgeEffectUtil {
     }
 
     public static void tryChangeEdgeEffects(ScrollView view, Drawable edgeDrawable,
-            Drawable glowDrawable) {
+                                            Drawable glowDrawable) {
         try {
             Field edgeGlowTopField = ScrollView.class.getDeclaredField("mEdgeGlowTop");
             edgeGlowTopField.setAccessible(true);
@@ -56,7 +55,7 @@ public class EdgeEffectUtil {
     }
 
     public static void tryChangeEdgeEffects(EdgeEffect edgeEffect, Drawable edgeDrawable,
-            Drawable glowDrawable) {
+                                            Drawable glowDrawable) {
         try {
             Field edgeField = EdgeEffect.class.getDeclaredField("mEdge");
             edgeField.setAccessible(true);

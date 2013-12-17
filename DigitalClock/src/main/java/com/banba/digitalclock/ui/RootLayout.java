@@ -56,7 +56,9 @@ public class RootLayout extends FrameLayout {
 
     public static interface RootLayoutListener {
         void onAwake();
+
         void onSizeChanged(int width, int height);
+
         boolean isAwake();
     }
 }

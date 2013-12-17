@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="hoursTextWidget">
+        <item name="android:textSize">@dimen/widget_text_height</item>
+        <item name="android:textColor">@color/holo_blue_bright</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="minutesTextWidget" parent="hoursTextWidget">
+        <item name="android:textColor">@color/holo_blue_light</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="hoursTextKeyguard" parent="hoursTextWidget">
+        <item name="android:textSize">36sp</item>
+    </style>
+
+    <style name="minutesTextKeyguard" parent="hoursTextKeyguard">
+        <item name="android:textColor">@android:color/holo_blue_light</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+    <style name="minutesTextDaydream" parent="hoursTextDaydream">
+        <item name="android:textColor">@android:color/holo_blue_light</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+</resources>

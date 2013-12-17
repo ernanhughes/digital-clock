@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Window;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import java.util.Calendar;

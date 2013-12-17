@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-
 <view xmlns:android="http://schemas.android.com/apk/res/android"
     class="com.banba.digitalclock.ui.RootLayout"
     android:id="@+id/daydream_root"
@@ -9,7 +8,8 @@
     android:layout_height="match_parent">
 
     <!--suppress AndroidLintUselessParent -->
-    <LinearLayout android:id="@+id/daydream_container"
+    <LinearLayout
+        android:id="@+id/daydream_container"
         android:orientation="vertical"
         android:layout_gravity="center"
         android:paddingTop="16dp"
@@ -22,7 +22,8 @@
 
         <include layout="@layout/widget_include_clock" />
 
-        <view class="com.banba.digitalclock.ui.ExposedScrollView"
+        <view
+            class="com.banba.digitalclock.ui.ExposedScrollView"
             android:id="@+id/extensions_scroller"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -31,19 +32,19 @@
             android:fadingEdgeLength="@dimen/list_fading_edge_length"
             android:scrollbars="none">
 
-            <LinearLayout android:id="@+id/extensions_container"
+            <LinearLayout
+                android:id="@+id/extensions_container"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:orientation="vertical" >
+                android:orientation="vertical">
 
-            <com.banba.digitalclock.ui.DigitalFlipClock
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:id="@+id/cwClock"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content">
-            </com.banba.digitalclock.ui.DigitalFlipClock>
-</LinearLayout>
+                <com.banba.digitalclock.ui.DigitalFlipClock
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:id="@+id/cwClock"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"></com.banba.digitalclock.ui.DigitalFlipClock>
+            </LinearLayout>
         </view>
 
     </LinearLayout>

@@ -2,9 +2,6 @@ package com.banba.digitalclock;
 
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
@@ -18,7 +15,7 @@ import android.preference.RingtonePreference;
  * Created by Ernan on 13/12/13.
  * Copyrite Banba Inc. 2013.
  */
-public class Preferences  extends PreferenceActivity {
+public class Preferences extends PreferenceActivity {
 
     static final String COMPONENT_TIME = "time";
     static final String COMPONENT_DATE = "date";
@@ -54,7 +51,7 @@ public class Preferences  extends PreferenceActivity {
     /**
      * This fragment shows the preferences for the first header.
      */
-    public static class PreferencesFragment extends PreferenceFragment  implements SharedPreferences.OnSharedPreferenceChangeListener  {
+    public static class PreferencesFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -68,7 +65,7 @@ public class Preferences  extends PreferenceActivity {
         }
 
         @Override
-        public void onResume(){
+        public void onResume() {
             super.onResume();
             getPreferenceScreen().getSharedPreferences()
                     .registerOnSharedPreferenceChangeListener(this);
@@ -87,7 +84,7 @@ public class Preferences  extends PreferenceActivity {
             updatePreference(key);
         }
 
-        private void updatePreference(String key){
+        private void updatePreference(String key) {
             Preference pref = findPreference(key);
 
             if (pref instanceof ListPreference) {
@@ -96,8 +93,8 @@ public class Preferences  extends PreferenceActivity {
                 return;
             }
 
-            if (pref instanceof EditTextPreference){
-                EditTextPreference editPref =  (EditTextPreference) pref;
+            if (pref instanceof EditTextPreference) {
+                EditTextPreference editPref = (EditTextPreference) pref;
                 editPref.setSummary(editPref.getText());
                 return;
             }

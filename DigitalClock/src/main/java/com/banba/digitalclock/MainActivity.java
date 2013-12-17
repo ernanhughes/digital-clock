@@ -1,13 +1,12 @@
 package com.banba.digitalclock;
+
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
@@ -48,6 +47,7 @@ public class MainActivity extends Activity {
         super.onResume();
 //        registerReceiver(receiver, new IntentFilter(DigitalClockService.NOTIFICATION));
     }
+
     @Override
     protected void onPause() {
         super.onPause();

@@ -15,6 +15,10 @@
   -->
 
 <resources>
+    <dimen name="widget_margin">0dp</dimen>
+    <dimen name="widget_text_height">22dp</dimen>
+
+
     <integer name="animationSpeed">80</integer>
     <integer name="card_flip_time_full">300</integer>
     <integer name="card_flip_time_half">150</integer>

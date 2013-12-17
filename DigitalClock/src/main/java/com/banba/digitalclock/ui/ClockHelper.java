@@ -1,7 +1,5 @@
 package com.banba.digitalclock.ui;
 
-import java.util.TimeZone;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,32 +7,33 @@ import android.content.IntentFilter;
 import android.os.Handler;
 import android.text.format.Time;
 
+import java.util.TimeZone;
+
 /**
  * Helper class that handles common dirty work of a clock.
- * 
+ * <p/>
  * This helper requires a {@link com.banba.digitalclock.ui.ClockHelper.OnTimeChangeListener}, which currently
  * only supports per-minute updates.
- * 
- * @author jonson
  *
+ * @author jonson
  */
 public class ClockHelper {
 
-	protected boolean mAttached;
-	protected Time mCalendar;
-	protected TimeZone mTimeZone;
-	protected final Handler mHandler = new Handler();
-	
-	private final OnTimeChangeListener timeChangeHandler;
-	
-	public ClockHelper(OnTimeChangeListener timeChangeHandler) {
-		this.timeChangeHandler = timeChangeHandler;
-	}
+    protected boolean mAttached;
+    protected Time mCalendar;
+    protected TimeZone mTimeZone;
+    protected final Handler mHandler = new Handler();
+
+    private final OnTimeChangeListener timeChangeHandler;
+
+    public ClockHelper(OnTimeChangeListener timeChangeHandler) {
+        this.timeChangeHandler = timeChangeHandler;
+    }
 
 
-	public void onAttachToWindow(Context context) {
-		
-		if (!mAttached) {
+    public void onAttachToWindow(Context context) {
+
+        if (!mAttached) {
             mAttached = true;
             IntentFilter filter = new IntentFilter();
 
@@ -50,19 +49,19 @@ public class ClockHelper {
         // The time zone may have changed while the receiver wasn't registered, so update the Time
         mCalendar = new Time();
         mCalendar.setToNow();
-        
+
         // trigger an updated
         timeChangeHandler.handleTimeChange(mCalendar);
-	}
-	
-	
+    }
+
+
     public void onDetachedFromWindow(Context context) {
         if (mAttached) {
             context.unregisterReceiver(mIntentReceiver);
             mAttached = false;
         }
     }
-    
+
     private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -70,20 +69,20 @@ public class ClockHelper {
             timeChangeHandler.handleTimeChange(mCalendar);
         }
     };
-    
+
     /**
      * Sets the timezone, should be run from the UI thread.
-     * 
+     *
      * @param timeZone
      */
     public void setTimeZone(TimeZone timeZone) {
-		this.mTimeZone = timeZone;
-		this.mCalendar = new Time(timeZone.getID());
-		this.mCalendar.set(System.currentTimeMillis());
-		timeChangeHandler.handleTimeChange(mCalendar);
+        this.mTimeZone = timeZone;
+        this.mCalendar = new Time(timeZone.getID());
+        this.mCalendar.set(System.currentTimeMillis());
+        timeChangeHandler.handleTimeChange(mCalendar);
     }
-    
+
     public interface OnTimeChangeListener {
-    	public void handleTimeChange(Time now);
+        public void handleTimeChange(Time now);
     }
 }

@@ -1,25 +1,15 @@
 package com.banba.digitalclock;
 
-import java.util.Random;
-import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
-import android.app.Activity;
 import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.database.Cursor;
-import android.graphics.Color;
-import android.graphics.Point;
 import android.graphics.Typeface;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.service.dreams.DreamService;
 import android.text.format.Time;
@@ -27,17 +17,10 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.GridLayout;
-import android.widget.ImageView;
-import android.service.dreams.DreamService;
-import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.banba.digitalclock.ui.ClockHelper;
 import com.banba.digitalclock.ui.DigitalFlipClock;
-import com.banba.digitalclock.ui.EdgeEffectUtil;
-import com.banba.digitalclock.ui.FlipClock;
 import com.banba.digitalclock.ui.RootLayout;
 
 /**
@@ -67,7 +50,6 @@ public class DigitalClockService extends DreamService implements OnClickListener
     private static final float SCALE_WHEN_MOVING = 0.85f;
 
 
-
     private Handler mHandler = new Handler();
     private int mTravelDistance;
     private int mForegroundColor;
@@ -86,7 +68,7 @@ public class DigitalClockService extends DreamService implements OnClickListener
 
     DigitalFlipClock flipClock = null;
 
-    public DigitalClockService(){
+    public DigitalClockService() {
         helper = new ClockHelper(new ClockHelper.OnTimeChangeListener() {
             @Override
             public void handleTimeChange(Time now) {
@@ -144,7 +126,7 @@ public class DigitalClockService extends DreamService implements OnClickListener
     }
 
     @Override
-    public void onDreamingStopped(){
+    public void onDreamingStopped() {
 
         super.onDreamingStopped();
     }
@@ -173,7 +155,7 @@ public class DigitalClockService extends DreamService implements OnClickListener
         setScreenBright(!sp.getBoolean(PREF_DAYDREAM_NIGHT_MODE, true));
         setContentView(R.layout.digitalclock);
         helper.onAttachToWindow(getApplicationContext());
-        flipClock = (DigitalFlipClock)findViewById(R.id.cwClock);
+        flipClock = (DigitalFlipClock) findViewById(R.id.cwClock);
 
         Toast.makeText(this, "Lock Service Created", Toast.LENGTH_LONG).show();
         Typeface tf = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/digital-7.ttf");
@@ -183,7 +165,7 @@ public class DigitalClockService extends DreamService implements OnClickListener
 
     private Runnable mUpdateTimeTask = new Runnable() {
         public void run() {
-             mHandler.postDelayed(mUpdateTimeTask, 1000);
+            mHandler.postDelayed(mUpdateTimeTask, 1000);
         }
     };
 

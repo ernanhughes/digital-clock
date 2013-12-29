@@ -1,79 +1,85 @@
 package com.banba.digitalclock;
 
-import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
-import android.widget.AnalogClock;
-
-import java.util.Calendar;
+import android.content.pm.PackageManager;
+import android.widget.RemoteViews;
 
 /**
  * Created by Ernan on 16/12/13.
  * Copyrite Banba Inc. 2013.
  */
 public class AnalogClockAppWidget extends AppWidgetProvider {
-    private static final String TAG = "AnalogClockWidget";
-    private static final Intent update = new Intent(ClockService.ACTION_UPDATE);
-    private static final int REQUEST_CODE = 1;
-    private Context context = null;
 
-    @Override
-    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        Log.d(TAG, "onUpdate");
-        this.context = context;
-        this.context.startService(update);
-    }
+    public void onReceive(Context context, Intent intent)
+    {
+        String action = intent.getAction();
+        PendingIntent pendingIntent;
+        if (AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(action))
+        {
 
-    @Override
-    public void onDeleted(Context context,
-                          int[] appWidgetIds) {
-        Log.d(TAG, "onDeleted");
-        AppWidgetManager mgr = AppWidgetManager.getInstance(context);
-        int[] remainingIds = mgr.getAppWidgetIds(
-                new ComponentName(context, this.getClass()));
-        if (remainingIds == null || remainingIds.length <= 0) {
-            PendingIntent pi = PendingIntent.getService(context,
-                    REQUEST_CODE,
-                    update,
-                    PendingIntent.FLAG_NO_CREATE);
-            if (pi != null) {
-                AlarmManager am =
-                        (AlarmManager) context.getSystemService(
-                                Context.ALARM_SERVICE);
-                am.cancel(pi);
-                pi.cancel();
-                Log.d(TAG, "Alarm cancelled");
-            }
+            RemoteViews views = new RemoteViews(context.getPackageName(),
+                    R.layout.main_fragment);
+
+            pendingIntent = PendingIntent.getActivity(context, 0,getAlarmPackage(context), 0);
+            views.setOnClickPendingIntent(R.id.analogClock1, pendingIntent);
+
+            AppWidgetManager
+                    .getInstance(context)
+                    .updateAppWidget(
+                            intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS),
+                            views);
         }
     }
 
-    private void scheduleTimer() {
-        Calendar date = Calendar.getInstance();
-        date.set(Calendar.SECOND, 0);
-        date.set(Calendar.MILLISECOND, 0);
-        date.add(Calendar.MINUTE, 1);
-        AlarmManager am =
-                (AlarmManager) context.getSystemService(
-                        Context.ALARM_SERVICE);
-        PendingIntent pi = PendingIntent.getService(context,
-                REQUEST_CODE,
-                update,
-                PendingIntent.FLAG_NO_CREATE);
-        if (pi == null) {
-            pi = PendingIntent.getService(context,
-                    REQUEST_CODE,
-                    update,
-                    PendingIntent.FLAG_CANCEL_CURRENT);
-            am.setRepeating(AlarmManager.RTC,
-                    date.getTimeInMillis(),
-                    60 * 1000,
-                    pi);
-            Log.d(TAG, "Alarm created");
+    public Intent getAlarmPackage(Context context)
+    {
+        PackageManager packageManager = context.getPackageManager();
+        Intent AlarmClockIntent = new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER);
+
+        String clockImpls[][] = {
+                { "Standard Alarm", "com.android.alarmclock",
+                        "com.android.alarmclock.AlarmClock" },
+                { "HTC Alarm ClockDT", "com.htc.android.worldclock",
+                        "com.htc.android.worldclock.WorldClockTabControl" },
+                { "Standard Alarm ClockDT", "com.android.deskclock",
+                        "com.android.deskclock.AlarmClock" },
+                { "Froyo Nexus Alarm ClockDT",
+                        "com.google.android.deskclock",
+                        "com.android.deskclock.DeskClock" },
+                { "Moto Blur Alarm ClockDT",
+                        "com.motorola.blur.alarmclock",
+                        "com.motorola.blur.alarmclock.AlarmClock" },
+                { "Samsung Galaxy S", "com.sec.android.app.clockpackage",
+                        "com.sec.android.app.clockpackage.ClockPackage" } };
+
+        boolean foundClockImpl = false;
+
+        for (int i = 0; i < clockImpls.length; i++)
+        {
+            String packageName = clockImpls[i][1];
+            String className = clockImpls[i][2];
+            try
+            {
+                ComponentName cn = new ComponentName(packageName, className);
+                packageManager.getActivityInfo(cn,PackageManager.GET_META_DATA);
+                AlarmClockIntent.setComponent(cn);
+                foundClockImpl = true;
+            } catch (PackageManager.NameNotFoundException nf)
+            {
+            }
+        }
+        if (foundClockImpl)
+        {
+            return AlarmClockIntent;
+        }
+        else
+        {
+            return null;
         }
     }
 }

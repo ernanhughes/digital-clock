@@ -1,67 +1,73 @@
 package com.banba.digitalclock;
 
-import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBar;
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
+import android.view.ViewGroup;
+import android.os.Build;
+import android.widget.Button;
+import android.widget.ImageView;
 
-public class MainActivity extends Activity {
+import com.banba.digitalclock.R;
 
-    private TextView textView;
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
+import java.util.List;
+
+public class MainActivity extends ActionBarActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main_activity);
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.container, new PlaceholderFragment())
+                    .commit();
+        }
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * A placeholder fragment containing a simple view.
+     */
+    public static class PlaceholderFragment extends Fragment {
+
+        public PlaceholderFragment() {
+        }
 
         @Override
-        public void onReceive(Context context, Intent intent) {
-            Bundle bundle = intent.getExtras();
-            if (bundle != null) {
-//                String string = bundle.getString(DigitalClockService.FILEPATH);
-//                int resultCode = bundle.getInt(DigitalClockService.RESULT);
-//                if (resultCode == RESULT_OK) {
-//                    Toast.makeText(MainActivity.this,
-//                            "Download complete. Download URI: " + string,
-//                            Toast.LENGTH_LONG).show();
-//                    textView.setText("Download done");
-//                } else {
-//                    Toast.makeText(MainActivity.this, "Download failed",
-//                            Toast.LENGTH_LONG).show();
-//                    textView.setText("Download failed");
-//                }
-            }
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.main_fragment, container, false);
+////            AnalogClock analogClock = new AnalogClock(getResources());
+//            ImageView v = (ImageView)getActivity().findViewById(R.id.analog_appwidget);
+//            v.setImageBitmap(analogClock.draw());
+            return rootView;
         }
-    };
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-        textView = (TextView) findViewById(R.id.status);
-
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-//        registerReceiver(receiver, new IntentFilter(DigitalClockService.NOTIFICATION));
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        unregisterReceiver(receiver);
-    }
-
-    public void onClick(View view) {
-
-//        Intent intent = new Intent(this, DigitalClockService.class);
-//        // add infos for the service which file to download and where to store
-//        intent.putExtra(DigitalClockService.FILENAME, "index.html");
-//        intent.putExtra(DigitalClockService.URL,
-//                "http://www.vogella.com/index.html");
-//        startService(intent);
-//        textView.setText("Service started");
     }
 }

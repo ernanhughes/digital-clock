@@ -3,7 +3,6 @@ package com.banba.digitalclock;
 import android.annotation.TargetApi;
 import android.app.IntentService;
 import android.appwidget.AppWidgetManager;
-import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Build;
@@ -25,10 +24,10 @@ import java.util.Calendar;
 public class ClockService extends IntentService {
     private static final DateFormat dateFormat =
             new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-    private static final String TAG = "com.banba.digitalclock.ClockService";
+    private static final String TAG = "com.banba.flipclock.ClockService";
 
     public static final String ACTION_UPDATE =
-            "com.banba.digitalclock.ACTION_UPDATE";
+            "com.banba.flipclock.ACTION_UPDATE";
 
     private static final int WIDGET_CATEGORY_HOME_SCREEN = 1;
     private static final int WIDGET_CATEGORY_KEYGUARD = 2;
@@ -52,25 +51,17 @@ public class ClockService extends IntentService {
         int[] appIds = manager.getAppWidgetIds(name);
         String[] words = TimeToWords.timeToWords(date);
         for (int id : appIds) {
-            int layoutId = R.layout.appwidget;
+            int layoutId = R.layout.textclock_appwidget;
             if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN )
             {
                 if ( getAppWidgetCategory( manager, id ) == WIDGET_CATEGORY_KEYGUARD )
                 {
-                    layoutId = R.layout.keyguard;
+                    layoutId = R.layout.textclock_keyguard;
                 }
             }
             RemoteViews v = new RemoteViews(getPackageName(),
                     layoutId);
             updateTime(words, v);
-            manager.updateAppWidget(id, v);
-        }
-        name = new ComponentName(this, AnalogClockAppWidget.class);
-        appIds = manager.getAppWidgetIds(name);
-        for (int id : appIds) {
-            int layoutId = R.layout.analog_appwidget;
-            RemoteViews v = new RemoteViews(getPackageName(),
-                    layoutId);
             manager.updateAppWidget(id, v);
         }
     }

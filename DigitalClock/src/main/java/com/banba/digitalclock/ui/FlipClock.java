@@ -7,9 +7,9 @@
 //import android.util.AttributeSet;
 //import android.view.LayoutInflater;
 //import android.view.View;
-//import android.widget.ImageView;
+//import android.textclock_widget.ImageView;
 //
-//import com.banba.digitalclock.R;
+//import com.banba.flipclock.R;
 //
 //import java.util.HashMap;
 //import java.util.Map;

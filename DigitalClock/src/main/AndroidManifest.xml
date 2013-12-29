@@ -12,57 +12,14 @@
         android:label="@string/app_name"
         android:icon="@drawable/ic_launcher"
         android:theme="@style/AppTheme">
-        <service
-            android:name=".DigitalClockService"
-            android:exported="true"
-            android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.service.dreams.DreamService" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-            <meta-data
-                android:name="android.service.dream"
-                android:resource="@xml/prefs" />
-        </service>
-
-        <activity
-            android:name=".Preferences"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@android:style/Theme.Light.WallpaperSettings"></activity>
-
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <receiver android:name=".TextClockAppWidget">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
-            </intent-filter>
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/appwidget_info"/>
-        </receiver>
-        <receiver android:name=".AnalogClockAppWidget" android:label="My Custom Clock Widget">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget" />
-        </receiver>
-        <service
-            android:name=".ClockService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.banba.digitalclock.ACTION_UPDATE" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </service>
         <meta-data
             android:name="com.google.android.backup.api_key"
             android:value="AEdPqrEAAAAIEqxHhNQAtdaIzqCM39V_IECOpaqJjwje5K_ViA" />

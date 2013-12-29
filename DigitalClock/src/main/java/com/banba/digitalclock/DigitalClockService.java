@@ -153,7 +153,7 @@ public class DigitalClockService extends DreamService implements OnClickListener
             mAnimation = ANIMATION_PENDULUM;
         }
         setScreenBright(!sp.getBoolean(PREF_DAYDREAM_NIGHT_MODE, true));
-        setContentView(R.layout.digitalclock);
+        setContentView(R.layout.flipclock);
         helper.onAttachToWindow(getApplicationContext());
         flipClock = (DigitalFlipClock) findViewById(R.id.cwClock);
 
@@ -185,7 +185,7 @@ public class DigitalClockService extends DreamService implements OnClickListener
     }
 
     private void layoutDream() {
-        setContentView(R.layout.digitalclock);
+        setContentView(R.layout.flipclock);
         mNeedsRelayout = true;
         renderDaydream(true);
 

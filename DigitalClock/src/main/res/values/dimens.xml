@@ -64,4 +64,5 @@
     <dimen name="color_grid_extra_padding">32dp</dimen>
 
     <dimen name="daydream_extensions_width">400dp</dimen>
+
 </resources>

@@ -15,17 +15,15 @@ import android.widget.RemoteViews;
  */
 public class AnalogClockAppWidget extends AppWidgetProvider {
 
-    public void onReceive(Context context, Intent intent)
-    {
+    public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
         PendingIntent pendingIntent;
-        if (AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(action))
-        {
+        if (AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(action)) {
 
             RemoteViews views = new RemoteViews(context.getPackageName(),
                     R.layout.main_fragment);
 
-            pendingIntent = PendingIntent.getActivity(context, 0,getAlarmPackage(context), 0);
+            pendingIntent = PendingIntent.getActivity(context, 0, getAlarmPackage(context), 0);
             views.setOnClickPendingIntent(R.id.analogClock1, pendingIntent);
 
             AppWidgetManager
@@ -36,49 +34,42 @@ public class AnalogClockAppWidget extends AppWidgetProvider {
         }
     }
 
-    public Intent getAlarmPackage(Context context)
-    {
+    public Intent getAlarmPackage(Context context) {
         PackageManager packageManager = context.getPackageManager();
         Intent AlarmClockIntent = new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER);
 
         String clockImpls[][] = {
-                { "Standard Alarm", "com.android.alarmclock",
-                        "com.android.alarmclock.AlarmClock" },
-                { "HTC Alarm ClockDT", "com.htc.android.worldclock",
-                        "com.htc.android.worldclock.WorldClockTabControl" },
-                { "Standard Alarm ClockDT", "com.android.deskclock",
-                        "com.android.deskclock.AlarmClock" },
-                { "Froyo Nexus Alarm ClockDT",
+                {"Standard Alarm", "com.android.alarmclock",
+                        "com.android.alarmclock.AlarmClock"},
+                {"HTC Alarm ClockDT", "com.htc.android.worldclock",
+                        "com.htc.android.worldclock.WorldClockTabControl"},
+                {"Standard Alarm ClockDT", "com.android.deskclock",
+                        "com.android.deskclock.AlarmClock"},
+                {"Froyo Nexus Alarm ClockDT",
                         "com.google.android.deskclock",
-                        "com.android.deskclock.DeskClock" },
-                { "Moto Blur Alarm ClockDT",
+                        "com.android.deskclock.DeskClock"},
+                {"Moto Blur Alarm ClockDT",
                         "com.motorola.blur.alarmclock",
-                        "com.motorola.blur.alarmclock.AlarmClock" },
-                { "Samsung Galaxy S", "com.sec.android.app.clockpackage",
-                        "com.sec.android.app.clockpackage.ClockPackage" } };
+                        "com.motorola.blur.alarmclock.AlarmClock"},
+                {"Samsung Galaxy S", "com.sec.android.app.clockpackage",
+                        "com.sec.android.app.clockpackage.ClockPackage"}};
 
         boolean foundClockImpl = false;
 
-        for (int i = 0; i < clockImpls.length; i++)
-        {
+        for (int i = 0; i < clockImpls.length; i++) {
             String packageName = clockImpls[i][1];
             String className = clockImpls[i][2];
-            try
-            {
+            try {
                 ComponentName cn = new ComponentName(packageName, className);
-                packageManager.getActivityInfo(cn,PackageManager.GET_META_DATA);
+                packageManager.getActivityInfo(cn, PackageManager.GET_META_DATA);
                 AlarmClockIntent.setComponent(cn);
                 foundClockImpl = true;
-            } catch (PackageManager.NameNotFoundException nf)
-            {
+            } catch (PackageManager.NameNotFoundException nf) {
             }
         }
-        if (foundClockImpl)
-        {
+        if (foundClockImpl) {
             return AlarmClockIntent;
-        }
-        else
-        {
+        } else {
             return null;
         }
     }

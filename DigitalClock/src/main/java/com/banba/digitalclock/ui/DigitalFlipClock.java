@@ -144,9 +144,9 @@ public class DigitalFlipClock extends BaseLinearLayoutClock {
      */
     public static int getHour1Drawable(boolean twentyFourHour, int hour0, int hour1) {
         if (twentyFourHour && hour1 == 0) {
-  //          return R.anim.flip_3_0;
+            //          return R.anim.flip_3_0;
         } else if (!twentyFourHour && hour0 == 0 && hour1 == 1) {
-    //        return R.anim.flip_2_1;
+            //        return R.anim.flip_2_1;
         } else {
             return mod10DigitToDrawable.get(hour1);
         }
@@ -162,7 +162,7 @@ public class DigitalFlipClock extends BaseLinearLayoutClock {
      */
     public static int getMinute0Drawable(int minute0) {
         if (minute0 == 0) {
-     //       return R.anim.flip_5_0;
+            //       return R.anim.flip_5_0;
         } else {
             return mod10DigitToDrawable.get(minute0);
         }

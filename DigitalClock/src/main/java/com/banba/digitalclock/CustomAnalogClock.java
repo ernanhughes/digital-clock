@@ -5,10 +5,8 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
-import android.text.format.Time;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.RemoteViews.RemoteView;
 
 
 public class CustomAnalogClock extends View {
@@ -36,13 +34,13 @@ public class CustomAnalogClock extends View {
     }
 
     public CustomAnalogClock(Context context, AttributeSet attrs,
-                         int defStyle) {
+                             int defStyle) {
         super(context, attrs, defStyle);
         Resources r = context.getResources();
         TypedArray a =
                 context.obtainStyledAttributes(
                         attrs, R.styleable.AnalogClock, defStyle, 0);
-        mContext=context;
+        mContext = context;
         // mDial = a.getDrawable(com.android.internal.R.styleable.AnalogClock_dial);
         // if (mDial == null) {
         mDial = r.getDrawable(R.drawable.clock_dial);
@@ -67,9 +65,9 @@ public class CustomAnalogClock extends View {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
-        int widthSize =  MeasureSpec.getSize(widthMeasureSpec);
+        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-        int heightSize =  MeasureSpec.getSize(heightMeasureSpec);
+        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
 
         float hScale = 1.0f;
         float vScale = 1.0f;
@@ -79,7 +77,7 @@ public class CustomAnalogClock extends View {
         }
 
         if (heightMode != MeasureSpec.UNSPECIFIED && heightSize < mDialHeight) {
-            vScale = (float )heightSize / (float) mDialHeight;
+            vScale = (float) heightSize / (float) mDialHeight;
         }
 
         float scale = Math.min(hScale, vScale);
@@ -145,9 +143,8 @@ public class CustomAnalogClock extends View {
         }
     }
 
-    public void setTime(int hours, int minutes, int seconds)
-    {
-        mSeconds = 6.0f*seconds;
+    public void setTime(int hours, int minutes, int seconds) {
+        mSeconds = 6.0f * seconds;
         mMinutes = minutes + seconds / 60.0f;
         mHour = hours + mMinutes / 60.0f;
     }

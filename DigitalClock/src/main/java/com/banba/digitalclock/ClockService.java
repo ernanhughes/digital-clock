@@ -52,10 +52,8 @@ public class ClockService extends IntentService {
         String[] words = TimeToWords.timeToWords(date);
         for (int id : appIds) {
             int layoutId = R.layout.textclock_appwidget;
-            if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN )
-            {
-                if ( getAppWidgetCategory( manager, id ) == WIDGET_CATEGORY_KEYGUARD )
-                {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                if (getAppWidgetCategory(manager, id) == WIDGET_CATEGORY_KEYGUARD) {
                     layoutId = R.layout.textclock_keyguard;
                 }
             }
@@ -66,13 +64,11 @@ public class ClockService extends IntentService {
         }
     }
 
-    @TargetApi( Build.VERSION_CODES.JELLY_BEAN )
-    private int getAppWidgetCategory(AppWidgetManager manager, int id)
-    {
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    private int getAppWidgetCategory(AppWidgetManager manager, int id) {
         int category = WIDGET_CATEGORY_HOME_SCREEN;
-        Bundle options = manager.getAppWidgetOptions( id );
-        if ( options != null )
-        {
+        Bundle options = manager.getAppWidgetOptions(id);
+        if (options != null) {
             category = options.getInt("appWidgetCategory", 1);
         }
         return category;

@@ -3,7 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <CustomAnalogClock
         android:id="@+id/analogClock1"
@@ -13,5 +13,5 @@
         android:layout_centerVertical="true"
         android:dial="@drawable/clock_dial"
         android:hand_minute="@drawable/clock_minute"
-        android:hand_hour="@drawable/clock_hour"/>
+        android:hand_hour="@drawable/clock_hour" />
 </RelativeLayout>

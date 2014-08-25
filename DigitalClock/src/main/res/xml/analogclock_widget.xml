@@ -9,5 +9,4 @@
     android:initialLayout="@layout/analog_appwidget"
     android:previewImage="@drawable/textclockwidget"
     android:label="Banba Analog Clock"
-    android:resizeMode="none">
-</appwidget-provider>
+    android:resizeMode="none"></appwidget-provider>

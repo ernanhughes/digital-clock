@@ -20,6 +20,7 @@
         <item name="android:textColor">@android:color/holo_blue_light</item>
         <item name="android:textStyle">normal</item>
     </style>
+
     <style name="minutesTextDaydream" parent="hoursTextDaydream">
         <item name="android:textColor">@android:color/holo_blue_light</item>
         <item name="android:textStyle">normal</item>

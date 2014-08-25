@@ -1,7 +1,6 @@
 package com.banba.digitalclock;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -46,12 +45,12 @@ public class AnalogClock extends View {
         mPropHourHeight = r.getDimension(R.styleable.AnalogClock_widget_analog_hour_height, R.dimen.widget_analog_hour_height);
         mPropHourHeightNegative = r
                 .getDimension(R.styleable.AnalogClock_widget_analog_hour_height_negative, R.dimen.widget_analog_hour_height_negative);
-        mPropMinuteHeight = r.getDimension(R.styleable.AnalogClock_widget_analog_size,R.dimen.widget_analog_minute_height);
+        mPropMinuteHeight = r.getDimension(R.styleable.AnalogClock_widget_analog_size, R.dimen.widget_analog_minute_height);
         mPropMinuteHeightNegative = r
-                .getDimension(R.styleable.AnalogClock_widget_analog_size,R.dimen.widget_analog_minute_height_negative);
-        mPropSecondHeight = r.getDimension(R.styleable.AnalogClock_widget_analog_size,R.dimen.widget_analog_second_height);
+                .getDimension(R.styleable.AnalogClock_widget_analog_size, R.dimen.widget_analog_minute_height_negative);
+        mPropSecondHeight = r.getDimension(R.styleable.AnalogClock_widget_analog_size, R.dimen.widget_analog_second_height);
         mPropSecondHeightNegative = r
-                .getDimension(R.styleable.AnalogClock_widget_analog_size,R.dimen.widget_analog_second_second_negative);
+                .getDimension(R.styleable.AnalogClock_widget_analog_size, R.dimen.widget_analog_second_second_negative);
         mPropHandsWidth = r.getDimension(R.styleable.AnalogClock_widget_analog_size, R.dimen.widget_analog_hands_width);
 
 

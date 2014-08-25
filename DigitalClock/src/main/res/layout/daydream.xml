@@ -11,7 +11,7 @@
         android:layout_weight="1"
         style="@style/hoursTextDaydream"
         android:gravity="bottom"
-        android:id="@+id/hours"/>
+        android:id="@+id/hours" />
 
     <TextView
         android:layout_width="match_parent"
@@ -19,7 +19,7 @@
         style="@style/minutesTextDaydream"
         android:layout_marginTop="-20dp"
         android:layout_marginBottom="-20dp"
-        android:id="@+id/tens"/>
+        android:id="@+id/tens" />
 
     <TextView
         android:layout_width="match_parent"
@@ -27,5 +27,5 @@
         android:layout_weight="1"
         style="@style/minutesTextDaydream"
         android:text="MinutesUnits"
-        android:id="@+id/minutes"/>
+        android:id="@+id/minutes" />
 </LinearLayout>

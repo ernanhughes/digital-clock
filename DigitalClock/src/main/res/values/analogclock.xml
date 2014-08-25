@@ -5,11 +5,14 @@
     <dimen name="widget_analog_border_radius">105dip</dimen>
     <dimen name="widget_analog_border_width">5dip</dimen>
     <dimen name="widget_analog_hour_height">50dip</dimen>
-    <dimen name="widget_analog_hour_height_negative">@dimen/widget_analog_hands_height_negative</dimen>
+    <dimen name="widget_analog_hour_height_negative">@dimen/widget_analog_hands_height_negative
+    </dimen>
     <dimen name="widget_analog_minute_height">83dip</dimen>
-    <dimen name="widget_analog_minute_height_negative">@dimen/widget_analog_hands_height_negative</dimen>
+    <dimen name="widget_analog_minute_height_negative">@dimen/widget_analog_hands_height_negative
+    </dimen>
     <dimen name="widget_analog_second_height">93dip</dimen>
-    <dimen name="widget_analog_second_second_negative">@dimen/widget_analog_hands_height_negative</dimen>
+    <dimen name="widget_analog_second_second_negative">@dimen/widget_analog_hands_height_negative
+    </dimen>
     <dimen name="widget_analog_hands_width">4dip</dimen>
     <dimen name="widget_analog_hands_height_negative">12dip</dimen>
     <declare-styleable name="AnalogClock">

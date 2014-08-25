@@ -3,6 +3,6 @@
     android:initialLayout="@layout/analog_appwidget2"
     android:minHeight="110dip"
     android:minWidth="110dip"
-    android:updatePeriodMillis="0" >
+    android:updatePeriodMillis="0">
 
 </appwidget-provider>

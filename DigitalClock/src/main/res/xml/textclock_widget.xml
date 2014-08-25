@@ -10,5 +10,4 @@
     android:initialLayout="@layout/textclock_appwidget"
     android:previewImage="@drawable/analogclockwidget"
     android:label="Text Clock Widget"
-    android:resizeMode="none">
-</appwidget-provider>
+    android:resizeMode="none"></appwidget-provider>
